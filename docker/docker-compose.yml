@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+
+  server:
+    build:
+      context: backend
+      dockerfile: backend.Dockerfile
+    container_name: employee-backend-docker-dev
+    volumes:
+      - ./../backend:/backend
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    depends_on:
+      - postgres
+    networks:
+      - employee-dev
+    tty: true
+
+    # command: ['yarn', 'dev:server']
+
+  client:
+    build:
+      context: frontend
+      dockerfile: frontend.Dockerfile
+    container_name: employee-docker-dev
+    volumes:
+      - ./../frontend:/app
+    ports:
+      - "5173:5173"
+    expose:
+      - "5173"
+    environment:
+      - BACKEND=http://server:3000/
+    # env_file:
+    #   - frontend/.env
+    depends_on:
+      - server
+    networks:
+      - employee-dev
+    tty: true
+    command: ["yarn", "run:app"]
+
+  postgres:
+    image: postgres:9.6-alpine
+    ports:
+      - "5432:5432"
+    networks:
+      - employee-dev
+    environment:
+      - POSTGRES_HOST=localhost
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=employee-dev
+    volumes:
+      - postgres:/var/lib/postgressql/data
+      - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+
+networks:
+  employee-dev:
+volumes:
+  postgres:
+  app:
+  backend:

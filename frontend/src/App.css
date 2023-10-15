@@ -1,0 +1,18 @@
+#root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#AppPanel {
+  flex: 1;
+  height: 50%;
+}
