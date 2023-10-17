@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../services/employee';
+import { createEmployee, getEmployees, updateEmployee, deleteEmployee, getEmployeeNumbers } from '../services/employee';
 
 interface EmployeeContextData {
   employeeList: Employee[];
@@ -16,9 +16,20 @@ export const EmployeeContext = React.createContext({} as EmployeeContextData)
 
 export const EmployeeProvider = ({ children }: { children: React.ReactNode }) => {
   const [showForm, setShowForm] = React.useState(false);
+
   const [employeeList, updateEmployeeList] = React.useState<Employee[]>([])
+
+  const [employeeNumbers, updateEmployeeNumbers] = React.useState<number[]>([])
+
   const [selectedEmployee, setSelectedEmployee] = React.useState<Employee | undefined>(undefined)
+
   const [loading, setLoading] = React.useState<boolean>(false)
+
+  const nextEmployeeNo = React.useMemo(() => {
+    const emplNos = employeeNumbers.sort((a, b) => b - a)[0] ?? 0
+    return `${emplNos + 1}`.padStart(5, '0')
+  }, [employeeNumbers])
+
   async function saveOrUpdateEmployee(employee: Employee) {
     setLoading(true)
     if (employee.guid) {
@@ -46,6 +57,7 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
       })
     }
   }
+
   async function removeEmployee(employee: Employee) {
     if (!employee.guid) return
     setLoading(true)
@@ -62,18 +74,18 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
   }
 
   function getAll() {
-    getEmployees().then((res) => {
-      const data = res.data as Employee[]
+    Promise.all([getEmployees(), getEmployeeNumbers()]).then(([employeeListRes, employeeNumbersRes]) => {
+      const data = employeeListRes.data as Employee[]
       updateEmployeeList(data)
+
+      const emplNos = employeeNumbersRes.data as number[]
+      updateEmployeeNumbers(emplNos)
       setLoading(false)
     }).catch((e) => {
       setLoading(false)
       alert(e.message)
     })
   }
-  const nextEmployeeNo = React.useMemo(() => {
-    return `${employeeList.length + 1}`.padStart(5, '0')
-  }, [employeeList])
 
   React.useEffect(() => {
     getAll()

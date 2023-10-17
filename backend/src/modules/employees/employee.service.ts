@@ -76,4 +76,18 @@ export class EmployeeService {
 
     return employee;
   }
+
+  async getEmployeeNumbers() {
+    const employees = await this.employeeRepo.find();
+    const emplNos = employees
+      .filter((e) => e.employeeNo.length <= 5)
+      .map((e) => Number(e.employeeNo));
+    return emplNos;
+  }
+
+  async getNextEmployeeNumber() {
+    const employeeNumbers = await this.getEmployeeNumbers();
+    const emplNos = employeeNumbers.sort((a, b) => b - a)[0] ?? 0;
+    return `${emplNos + 1}`.padStart(5, '0');
+  }
 }

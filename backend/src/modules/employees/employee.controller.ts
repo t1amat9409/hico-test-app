@@ -25,6 +25,18 @@ export class EmployeeController {
     return await this.employeeSercvice.getAll();
   }
 
+  @Get('employeeNos')
+  async getEmployeeNumbers() {
+    const list = await this.employeeSercvice.getEmployeeNumbers();
+    return list;
+  }
+
+  @Get('employeeNextNo')
+  async getNextEmployeeNumber() {
+    const empNo = await this.employeeSercvice.getNextEmployeeNumber();
+    return empNo;
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const newEmployee = await this.employeeSercvice.getOneByGUID(id);

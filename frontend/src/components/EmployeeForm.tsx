@@ -13,6 +13,7 @@ export const EmployeeForm = ({
   employee: initEmployee
 }: EmployeeFormProps) => {
   const { nextEmployeeNo, saveOrUpdateEmployee, selectedEmployee, removeEmployee } = useEmployeeContext()
+
   const [employee, updateEmployee] = React.useState<Employee>({
     employeeNo: initEmployee?.employeeNo ?? '',
     firstName: initEmployee?.firstName ?? '',
@@ -22,6 +23,7 @@ export const EmployeeForm = ({
     grossSalary: initEmployee?.grossSalary ?? '',
     color: initEmployee?.color ?? 'Default'
   })
+
   const [errors, setErrors] = React.useState<Record<keyof Employee, boolean>>({
     color: false,
     employeeNo: false,
@@ -32,9 +34,13 @@ export const EmployeeForm = ({
     lastName: false,
     salutation: false
   })
+
   const salutations: EmployeeSalutation[] = ['Dr', 'Mr', 'Mrs', 'Mx']
+
   const genders: EmployeeGender[] = ['Male', 'Female', 'Unspecified']
+
   const colors: EmployeeColor[] = ['Green', 'Blue', 'Red', 'Default']
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target
     updateEmployee({
@@ -131,6 +137,7 @@ export const EmployeeForm = ({
       })
     }
   }, [selectedEmployee])
+
   return (
     <Box sx={{
       border: '1px solid #ddd',

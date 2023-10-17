@@ -19,10 +19,15 @@ function updateEmployee(id: string, data: Employee) {
 function deleteEmployee(id: string) {
   return API.delete(`/employee/${id}`)
 }
+
+function getEmployeeNumbers() {
+  return API.get('/employee/employeeNos')
+}
 export {
   createEmployee,
   getEmployees,
   updateEmployee,
   deleteEmployee,
   getEmployee,
+  getEmployeeNumbers,
 }
