@@ -63,4 +63,20 @@ describe('Test Employee UI and API', () => {
     cy.get('[data-cy=employeeListItem]').contains(`${newEmployee.firstName} - Edit`).should('exist')
 
   })
+
+  it('Delete Employee', () => {
+    cy.get('[data-cy=employeeListItem]').contains(newEmployee.firstName).click({ force: true })
+    cy.get('p').contains('Empoyee Information').should('exist')
+
+    cy.get('[data-cy=employeeFormDelete]').click({ force: true })
+
+    cy.window().then((win) =>
+      cy.stub(win, 'confirm').as('confirm').returns(true),
+    )
+
+    cy.wait(1000)
+
+    cy.get('[data-cy=employeeListItem]').contains(`${newEmployee.firstName} - Edit`).should('not.exist')
+
+  })
 })

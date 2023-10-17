@@ -12,7 +12,7 @@ export const EmployeeForm = ({
   onCancel,
   employee: initEmployee
 }: EmployeeFormProps) => {
-  const { nextEmployeeNo, saveOrUpdateEmployee, selectedEmployee } = useEmployeeContext()
+  const { nextEmployeeNo, saveOrUpdateEmployee, selectedEmployee, removeEmployee } = useEmployeeContext()
   const [employee, updateEmployee] = React.useState<Employee>({
     employeeNo: initEmployee?.employeeNo ?? '',
     firstName: initEmployee?.firstName ?? '',
@@ -283,6 +283,12 @@ export const EmployeeForm = ({
               })}
             </RadioGroup>
           </FormControl>
+          {selectedEmployee && <Button data-cy="employeeFormDelete" size='small' variant='contained' color='error' onClick={() => {
+            const cnfm = window.confirm('Are you sure you want to delete this employee data?')
+            if (cnfm) {
+              removeEmployee(selectedEmployee)
+            }
+          }}>Delete</Button>}
         </Box>
       </Box>
     </Box>

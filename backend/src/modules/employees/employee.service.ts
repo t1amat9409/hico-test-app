@@ -13,13 +13,17 @@ export class EmployeeService {
   ) {}
 
   async getAll() {
-    const results = await this.employeeRepo.find({});
+    const results = await this.employeeRepo.find({
+      where: {
+        isActive: true,
+      },
+    });
     return results;
   }
 
   async create(data: EmployeeDTO) {
-    const { guid } = generateGuid()
-    const newEmployee = await this.employeeRepo.create({...data, guid});
+    const { guid } = generateGuid();
+    const newEmployee = await this.employeeRepo.create({ ...data, guid });
     newEmployee.isActive = true;
     await this.employeeRepo.save(newEmployee);
     return newEmployee;
@@ -35,6 +39,7 @@ export class EmployeeService {
       });
       existing.isActive = true;
       await this.employeeRepo.save(existing);
+      console.log(existing);
       return true;
     }
     return false;
@@ -43,8 +48,9 @@ export class EmployeeService {
   async remove(guid: string) {
     const existing = await this.getOneByGUID(guid);
     if (existing) {
-      existing.isActive = true;
+      existing.isActive = false;
       await this.employeeRepo.save(existing);
+      console.log(existing);
       return true;
     }
 

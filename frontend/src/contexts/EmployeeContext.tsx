@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { createEmployee, getEmployees, updateEmployee } from '../services/employee';
+import { createEmployee, getEmployees, updateEmployee, deleteEmployee } from '../services/employee';
 
 interface EmployeeContextData {
   employeeList: Employee[];
@@ -46,7 +46,20 @@ export const EmployeeProvider = ({ children }: { children: React.ReactNode }) =>
       })
     }
   }
-  async function removeEmployee(employee: Employee) { }
+  async function removeEmployee(employee: Employee) {
+    if (!employee.guid) return
+    setLoading(true)
+    deleteEmployee(employee.guid).then((res) => {
+      getAll()
+      if (res.data) {
+        setSelectedEmployee(undefined)
+        setShowForm(false)
+      }
+    }).catch((e) => {
+      setLoading(false)
+      alert(e.messsage)
+    })
+  }
 
   function getAll() {
     getEmployees().then((res) => {
