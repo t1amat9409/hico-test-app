@@ -95,13 +95,10 @@ export const EmployeeForm = ({
     const fieldErrors: Record<string, boolean> = {}
     Object.keys(employee).forEach((key) => {
       if (key && !['guid', 'employeeNo'].includes(key)) {
-        setErrors({
-          ...errors,
-          [key]: employee[key as keyof Employee]?.length === 0 ? true : false
-        })
-        fieldErrors[key] = employee[key as keyof Employee]?.length === 0 ? true : false
+        fieldErrors[key] = employee[key as keyof Employee]?.length === 0 || employee[key as keyof Employee] === '' ? true : false
       }
     })
+    setErrors(fieldErrors)
     const hasErrors = Object.keys(fieldErrors).some((k) => fieldErrors[k])
     if (hasErrors) {
       alert('All fields are required!')

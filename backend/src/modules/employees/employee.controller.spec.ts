@@ -68,26 +68,23 @@ describe('EmployeeController', () => {
       employeeNo: employeeNextNo,
     });
     emplGuid = newEmployee.guid;
-    console.log(newEmployee.firstName, newEmployeeData.firstName, emplGuid);
     expect(newEmployee.firstName).toBe(newEmployeeData.firstName);
   });
 
-  it('should update a new employee', async () => {
+  it('should update employee', async () => {
     const employee = await service.getOneByGUID(emplGuid);
     expect(employee).toBeDefined();
     const newEmployee = await controller.update(employee!.guid, {
       ...employee!,
       firstName: `${newEmployeeData.firstName} - Edit`,
     });
-    console.log(typeof newEmployee);
-    expect(typeof newEmployee).toBe('boolean');
+    expect(newEmployee).toBe(true);
   });
 
   it('should delete employee', async () => {
     const employee = await service.getOneByGUID(emplGuid);
     expect(employee).toBeDefined();
     const newEmployee = await controller.remove(employee!.guid);
-    console.log(newEmployee);
-    expect(typeof newEmployee).toBe('boolean');
+    expect(newEmployee).toBe(true);
   });
 });

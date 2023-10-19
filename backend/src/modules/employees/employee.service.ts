@@ -23,7 +23,16 @@ export class EmployeeService {
 
   async create(data: EmployeeDTO) {
     const { guid } = generateGuid();
-    const newEmployee = await this.employeeRepo.create({ ...data, guid });
+    let employeeNo: string = data.employeeNo;
+    const employeeWithEmpNo = await this.getOneByEmployeeNo(data.employeeNo);
+    if (employeeWithEmpNo) {
+      employeeNo = await this.getNextEmployeeNumber();
+    }
+    const newEmployee = await this.employeeRepo.create({
+      ...data,
+      guid,
+      employeeNo,
+    });
     newEmployee.isActive = true;
     await this.employeeRepo.save(newEmployee);
     return newEmployee;
