@@ -3,7 +3,7 @@ import { Base } from './base';
 import { EmployeeColor, EmployeeGender, EmployeeSalutation } from 'src/dto';
 
 @Entity({
-  name: 'employees'
+  name: 'employees',
 })
 export class Employee extends Base {
   @Index()
